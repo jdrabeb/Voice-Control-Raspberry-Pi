@@ -30,5 +30,7 @@ if __name__ == '__main__':
             elif text.startswith('turn off'):
                 red_led.turn_off()
 
-        except:
-            print("Sorry could not recognize your voice")
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
