@@ -1,7 +1,7 @@
 import requests
 
 class ifttt_webhooks:
-        def __init__(self, key):
+    def __init__(self, key):
         self.key = key
 
     def trig(self, event_name):

@@ -17,11 +17,11 @@ def main():
     pg.mixer.music.play()
     while pg.mixer.music.get_busy() == True:
         continue
-    audio = r.listen(source, None, 2)
     while True:
         with sr.Microphone() as source:
             print("Speak Anything :")
-                    try:
+            audio = r.listen(source, None, 2)
+        try:
             #TODO Use Sphynx since it's offline.
             text = r.recognize_google(audio)
             print("You said : {}".format(text))
