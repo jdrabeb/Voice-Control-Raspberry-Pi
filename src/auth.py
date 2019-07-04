@@ -6,6 +6,9 @@ import threading
 import wave
 import time
 import json
+import pygame as pg
+from control import main
+
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -34,7 +37,7 @@ root.geometry(str(WIDTH)+"x"+str(HEIGHT))
 
 def record():
     global is_recording
-    global counter 
+    global counter
     global text
     global authorize
     global usr_id
@@ -66,7 +69,7 @@ def record():
     wf.writeframes(b''.join(frames))
     wf.close()
     is_recording = False
-    
+
     if authorize == False:
         resp = my_voiceit.create_voice_enrollment(usr_id,"en-US",text, WAVE_OUTPUT_FILENAMEBARE+str(counter)+WAVE_FORMAT)
         message_text.insert(tk.END, resp['message']+"\n")
@@ -75,8 +78,19 @@ def record():
         message_text.insert(tk.END, resp['message']+"\n")
         if resp['responseCode'] == "SUCC":
             authorizedLabel.configure(bg='green')
+            pg.mixer.init()
+            pg.mixer.music.load("../audio/hello.wav")
+            pg.mixer.music.play()
+            while pg.mixer.music.get_busy() == True:
+                continue
+            main()
         else:
             authorizedLabel.configure(bg='red')
+            pg.mixer.init()
+            pg.mixer.music.load("../audio/who_are_you.wav")
+            pg.mixer.music.play()
+            while pg.mixer.music.get_busy() == True:
+                continue
 
 def create_user():
     global usr_id
@@ -100,7 +114,7 @@ def create_user_record():
         is_recording = True
         thread = threading.Thread(target=record)
         thread.start()
-    
+
 
 def authorize_user():
     global authorize

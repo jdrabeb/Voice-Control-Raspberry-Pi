@@ -1,10 +1,9 @@
 from led import led
 from ifttt import ifttt_webhooks
 import speech_recognition as sr
-import simpleaudio as sa
 import pygame as pg
 
-if __name__ == '__main__':
+def main():
     r = sr.Recognizer()
 
     # Instantiate IFTTT Webhooks object.
@@ -13,24 +12,19 @@ if __name__ == '__main__':
 
     # Instantiate led object.
     red_led = led()
-
+    pg.mixer.init()
+    pg.mixer.music.load("../audio/can_i_help_you.wav")
+    pg.mixer.music.play()
+    while pg.mixer.music.get_busy() == True:
+        continue
+    audio = r.listen(source, None, 2)
     while True:
         with sr.Microphone() as source:
             print("Speak Anything :")
-            pg.mixer.init()
-            pg.mixer.music.load("../audio/can_i_help_you.wav")
-            pg.mixer.music.play()
-            while pg.mixer.music.get_busy() == True:
-                continue
-
-
-            audio = r.listen(source, None, 2)
-
-        try:
+                    try:
             #TODO Use Sphynx since it's offline.
             text = r.recognize_google(audio)
             print("You said : {}".format(text))
-
             if text.startswith(webhooks_keyword):
                 event_name = text[len(webhooks_keyword):]
                 webhooks.trig(event_name)
