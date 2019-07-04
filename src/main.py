@@ -1,6 +1,8 @@
 from led import led
 from ifttt import ifttt_webhooks
 import speech_recognition as sr
+import simpleaudio as sa
+import pygame as pg
 
 if __name__ == '__main__':
     r = sr.Recognizer()
@@ -15,7 +17,14 @@ if __name__ == '__main__':
     while True:
         with sr.Microphone() as source:
             print("Speak Anything :")
-            audio = r.listen(source)
+            pg.mixer.init()
+            pg.mixer.music.load("../audio/can_i_help_you.wav")
+            pg.mixer.music.play()
+            while pg.mixer.music.get_busy() == True:
+                continue
+
+
+            audio = r.listen(source, None, 2)
 
         try:
             #TODO Use Sphynx since it's offline.
@@ -27,12 +36,20 @@ if __name__ == '__main__':
                 webhooks.trig(event_name)
             elif text.startswith('turn on'):
                 red_led.turn_on()
-                wave_obj = sa.WaveObject.from_wave_file("../audio/activated.wav")
-                play_obj = wave_obj.play()
-                play_obj.wait_done()
+                pg.mixer.init()
+                pg.mixer.music.load("../audio/activated.wav")
+                pg.mixer.music.play()
+                while pg.mixer.music.get_busy() == True:
+                    continue
 
             elif text.startswith('turn off'):
                 red_led.turn_off()
+                pg.mixer.init()
+                pg.mixer.music.load("../audio/shutting_down.wav")
+                pg.mixer.music.play()
+                while pg.mixer.music.get_busy() == True:
+                    continue
+
 
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")
