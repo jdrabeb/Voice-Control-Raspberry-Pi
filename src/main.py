@@ -31,4 +31,4 @@ if __name__ == '__main__':
                 red_led.turn_off()
 
         except:
-            print("Sorry could not recognize your voice {}".format(e))
+            print("Sorry could not recognize your voice")
