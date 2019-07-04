@@ -27,6 +27,10 @@ if __name__ == '__main__':
                 webhooks.trig(event_name)
             elif text.startswith('turn on'):
                 red_led.turn_on()
+                wave_obj = sa.WaveObject.from_wave_file("../audio/activated.wav")
+                play_obj = wave_obj.play()
+                play_obj.wait_done()
+
             elif text.startswith('turn off'):
                 red_led.turn_off()
 
