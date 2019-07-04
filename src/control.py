@@ -27,6 +27,11 @@ def main():
             text = r.recognize_google(audio)
             print("You said : {}".format(text))
             if text.startswith(webhooks_keyword):
+                pg.mixer.init()
+                pg.mixer.music.load("../audio/noted.wav")
+                pg.mixer.music.play()
+                while pg.mixer.music.get_busy() == True:
+                    continue
                 event_name = text[len(webhooks_keyword):]
                 webhooks.trig(event_name)
             elif text.startswith('turn on'):
@@ -36,7 +41,6 @@ def main():
                 pg.mixer.music.play()
                 while pg.mixer.music.get_busy() == True:
                     continue
-
             elif text.startswith('turn off'):
                 red_led.turn_off()
                 pg.mixer.init()
