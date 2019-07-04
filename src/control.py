@@ -2,13 +2,14 @@ from led import led
 from ifttt import ifttt_webhooks
 import speech_recognition as sr
 import pygame as pg
+import sys
 
 def main():
     r = sr.Recognizer()
 
     # Instantiate IFTTT Webhooks object.
     webhooks = ifttt_webhooks('402LsIog5lt0cMATLnmtb')
-    webhooks_keyword = 'start '
+    webhooks_keyword = 'activate '
 
     # Instantiate led object.
     red_led = led()
@@ -43,7 +44,14 @@ def main():
                 pg.mixer.music.play()
                 while pg.mixer.music.get_busy() == True:
                     continue
-
+            elif text.startswith('goodbye'):
+                red_led.turn_off()
+                pg.mixer.init()
+                pg.mixer.music.load("../audio/goodbye.wav")
+                pg.mixer.music.play()
+                while pg.mixer.music.get_busy() == True:
+                    continue
+                sys.exit(0)
 
         except sr.UnknownValueError:
             print("Google Speech Recognition could not understand audio")

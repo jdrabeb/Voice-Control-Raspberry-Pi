@@ -74,6 +74,11 @@ def record():
         resp = my_voiceit.create_voice_enrollment(usr_id,"en-US",text, WAVE_OUTPUT_FILENAMEBARE+str(counter)+WAVE_FORMAT)
         message_text.insert(tk.END, resp['message']+"\n")
     elif authorize == True:
+        pg.mixer.init()
+        pg.mixer.music.load("../audio/searching.wav")
+        pg.mixer.music.play()
+        while pg.mixer.music.get_busy() == True:
+            continue
         resp =my_voiceit.voice_verification(usr_id, "en-US", text, WAVE_OUTPUT_FILENAMEBARE+str(counter)+WAVE_FORMAT )
         message_text.insert(tk.END, resp['message']+"\n")
         if resp['responseCode'] == "SUCC":
