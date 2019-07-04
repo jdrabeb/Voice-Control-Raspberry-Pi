@@ -22,7 +22,7 @@ if __name__ == '__main__':
             text = r.recognize_google(audio)
             print("You said : {}".format(text))
 
-            if text.startswith(ifttt_keyword):
+            if text.startswith(webhooks_keyword):
                 event_name = text[len(webhooks_keyword):]
                 webhooks.trig(event_name)
             elif text.startswith('turn on'):
@@ -31,4 +31,4 @@ if __name__ == '__main__':
                 red_led.turn_off()
 
         except:
-            print("Sorry could not recognize your voice")
+            print("Sorry could not recognize your voice {}".format(e))
